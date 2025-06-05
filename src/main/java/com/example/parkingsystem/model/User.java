@@ -10,8 +10,9 @@ public class User
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	int userId;
-	String userName;
+	private int userId;
+	
+	private String userName;
 	public int getUserId() 
 	{
 		return userId;

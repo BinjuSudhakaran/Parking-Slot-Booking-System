@@ -1,42 +1,20 @@
 package com.example.parkingsystem.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name="shop")
 public class Shop
 {
 	@Id	
-	int shopId;
+	private int shopId;
 	
-	String shopName;
-	int slotsAvailable;
+	private String shopName;
 	
-	@OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<ParkingSlot> parkingSlots;
+	private int totalSlot;
 
-	public List<ParkingSlot> getParkingSlots()
-	{
-	    return parkingSlots;
-	}
-	public void setParkingSlots(List<ParkingSlot> parkingSlots)
-	{
-	    this.parkingSlots = parkingSlots;
-	}
-	public int getSlotsAvailable()
-	{
-		return slotsAvailable;
-	}
-	public void setSlotsAvailable(int slotsAvailable) 
-	{
-		this.slotsAvailable = slotsAvailable;
-	}
 	public int getShopId() 
 	{
 		return shopId;
@@ -52,6 +30,12 @@ public class Shop
 	public void setShopName(String shopName) 
 	{
 		this.shopName = shopName;
+	}
+	public int getTotalSlot() {
+		return totalSlot;
+	}
+	public void setTotalSlot(int totalSlot) {
+		this.totalSlot = totalSlot;
 	}
 	
 }

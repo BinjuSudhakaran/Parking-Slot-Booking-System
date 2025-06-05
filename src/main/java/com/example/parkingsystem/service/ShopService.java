@@ -26,26 +26,22 @@ public class ShopService
 		return shopRepository.findAll();
 	}
 
-	public Shop addShop(Shop shop) 
-	{
-        // Save the shop first
-        Shop savedShop = shopRepository.save(shop);
-
-        // Create parking slots for this shop
-        for (int i = 0; i < shop.getSlotsAvailable(); i++)
-        {
-            ParkingSlot slot = new ParkingSlot();
-            slot.setBooked(false);  // available by default
-            slot.setShop(savedShop);
-            parkingSlotRepository.save(slot);
-        }
-
-        return savedShop;
-    }
-	
 	public List<Shop> searchShops(String shopName) 
 	 {
         return shopRepository.findByshopNameContainingIgnoreCase(shopName);
     }
 
+	public Shop createShop(Shop shop)
+	{
+		
+		Shop savedShop = shopRepository.save(shop);
+		for(int i=0;i<shop.getTotalSlot();i++)
+		{
+			ParkingSlot slot = new ParkingSlot();
+			slot.setShop(savedShop);
+			parkingSlotRepository.save(slot);		
+		}
+		return savedShop;
+	}
+	
 }
