@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +40,7 @@ public class BookingController
 	{
 	    if (booking.getBookingDate() == null || booking.getBookingDate().isBefore(LocalDate.now()))
 	    {
-	        return ResponseEntity.badRequest().body("Can not book slot for a null date orpast date");
+	        return ResponseEntity.badRequest().body("Can not book slot for a null date or past date");
 	    }
    
 	    if (!bookingService.areSlotsAvailable(booking.getBookingDate()))
@@ -52,6 +55,7 @@ public class BookingController
 
 	   
 	    ParkingSlot fullSlot = parkingSlotRepository.findById(booking.getParkingSlot().getSlotId()).orElse(null);
+	    
 	    if (fullSlot == null) 
 	    {
 	        return ResponseEntity.badRequest().body("Invalid Parking Slot ID");
@@ -59,6 +63,7 @@ public class BookingController
 
 	    
 	    User user = userRepository.findById(booking.getUser().getUserId()).orElse(null);
+	    
 	    if (user == null) 
 	    {
 	        return ResponseEntity.badRequest().body("Invalid User ID");
@@ -91,11 +96,47 @@ public class BookingController
 	    if (available > 0)
 	    {
 	        return ResponseEntity.ok(available + " slots available");
-	    } else 
+	    }
+	    else 
 	    {
 	        return ResponseEntity.status(409).body("No parking slots available for the selected date");
 	    }
 	}
+	
+	@DeleteMapping("/cancelbooking/{bookingId}")
+	public ResponseEntity<Object> cancelBooking(@PathVariable int bookingId)
+	{
+	    Booking booking = bookingService.getBookingById(bookingId);
+	    
+	    if (booking == null) 
+	    {
+	        return ResponseEntity.status(404).body("Booking not found");
+	    }
+
+	    bookingService.cancelBooking(bookingId);
+	    return ResponseEntity.ok("Booking cancelled successfully");
+	}
+	
+	@PutMapping("/park/{bookingId}")
+	public ResponseEntity<Object> parkVehicle(@PathVariable int bookingId)
+	{
+	    Booking booking = bookingService.getBookingById(bookingId);
+
+	    if (booking == null) {
+	        return ResponseEntity.status(404).body("Booking not found");
+	    }
+
+	    if (booking.isParked()) {
+	        return ResponseEntity.badRequest().body("Vehicle already parked for this booking");
+	    }
+
+	    booking.setParked(true);
+	    bookingService.updateBooking(booking);
+
+	    return ResponseEntity.ok("Vehicle parked successfully");
+	}
+
+
 
 	
 	

@@ -33,6 +33,16 @@ public class Booking
 	private ParkingSlot parkingSlot;
 	
 	private LocalDate bookingDate;
+	
+	private boolean parked = false;
+
+	public boolean isParked() {
+		return parked;
+	}
+
+	public void setParked(boolean parked) {
+		this.parked = parked;
+	}
 
 	public int getBookingId() {
 		return bookingId;

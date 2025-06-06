@@ -55,5 +55,20 @@ public class BookingService
         int available = allSlots.size() - bookedSlots.size();
         return available;
     }
+    public Booking getBookingById(int bookingId) 
+    {
+        return bookingRepository.findById(bookingId).orElse(null);
+    }
+
+    public void cancelBooking(int bookingId) 
+    {
+        bookingRepository.deleteById(bookingId);
+    }
+    public void updateBooking(Booking booking)
+    {
+        bookingRepository.save(booking); // Save updated parking status
+    }
+
+
 
 }
