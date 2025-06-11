@@ -35,6 +35,17 @@ public class Booking
 	private LocalDate bookingDate;
 	
 	private boolean parked = false;
+	
+	private boolean exited = false;
+
+
+	public boolean isExited() {
+		return exited;
+	}
+
+	public void setExited(boolean exited) {
+		this.exited = exited;
+	}
 
 	public boolean isParked() {
 		return parked;
